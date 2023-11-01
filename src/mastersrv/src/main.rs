@@ -54,7 +54,7 @@ mod locations;
 
 const SERVER_TIMEOUT_SECONDS: u64 = 30;
 
-type ShortString = ArrayString<[u8; 64]>;
+type ShortString = ArrayString<64>;
 
 #[derive(Debug, Deserialize)]
 struct Register {
@@ -295,7 +295,7 @@ impl Challenger {
                 base64::encode_config_slice(&hash.finalize()[..16], base64::STANDARD, &mut buf);
             ShortString::from(str::from_utf8(&buf[..len]).unwrap()).unwrap()
         }
-        let mut buf: ArrayVec<[u8; 128]> = ArrayVec::new();
+        let mut buf: ArrayVec<_, 128> = ArrayVec::new();
         write!(&mut buf, "{}", addr).unwrap();
         Challenge {
             current: hash(&self.seed, &buf),
@@ -408,7 +408,7 @@ impl Servers {
                 });
             }
             hash_map::Entry::Occupied(mut o) => {
-                let mut server = &mut o.get_mut();
+                let server = &mut o.get_mut();
                 if insert_addr {
                     server.addresses.push(addr);
                     server.addresses.sort_unstable();
@@ -688,7 +688,7 @@ fn handle_register(
             let token_hex = register
                 .connless_request_token
                 .as_ref()
-                .ok_or_else(|| "registering with tw-0.7+udp:// requires header Connless-Token")?;
+                .ok_or("registering with tw-0.7+udp:// requires header Connless-Token")?;
             let mut token = [0; 4];
             hex::decode_to_slice(token_hex.as_bytes(), &mut token).map_err(|e| {
                 RegisterError::new(format!("invalid hex in Connless-Request-Token: {}", e))
