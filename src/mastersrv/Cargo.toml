@@ -1,23 +1,24 @@
 [package]
 name = "mastersrv"
 version = "0.0.1"
-authors = ["heinrich5991 <heinrich5991@gmail.com>"]
+authors = ["heinrich5991 <heinrich5991@gmail.com>", "BurnyLlama <burnyllama@protonmail.com>"]
 edition = "2018"
 publish = false
 license = "Zlib"
 
 [workspace]
 
+# TODO: Should probably update `base64` and `clap`, but there are many breaking changes. :(
 [dependencies]
 arrayvec = { version = "0.7.4", features = ["serde"] }
-base64 = "0.13.0"
+base64 = "0.13.1"
 bytes = "1.5.0"
 clap = { version = "2.34.0", default-features = false, features = [
   "suggestions",
   "wrap_help",
 ] }
 csv = "1.3.0"
-env_logger = "0.8.3"
+env_logger = "0.10.0"
 headers = "0.3.9"
 hex = "0.4.3"
 ipnet = { version = "2.9.0", features = ["serde"] }
